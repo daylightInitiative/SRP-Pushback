@@ -19,7 +19,7 @@ Next, make it yours:
 
 1. In `gradle.properties`, replace `group`, `name`, and `version`.
 2. In `src/main/resources/mcmod.info`, replace `modid`, `name`, `description`, `authorList`, and any other properties you feel like filling out.
-3. In `src/main/java/com/example/SampleMod112`, fill out the `MODID`, `NAME`, and `VERSION` strings again, and move the class to your own package (not `com.example`).
+3. In `src/main/java/com/example/SampleMod112`, fill out the `MODID`, `NAME`, and `VERSION` strings again, and move the class to your own package (not `com.wehatemoddingmc`).
    * Or just delete it and make a new `@Mod` class, I'm not your mom.
 
 Finally, delete this file and replace it with your own `README`. Good luck in your modding endeavour.

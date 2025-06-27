@@ -1,10 +1,9 @@
-package com.wehatemoddingmc.srpPushback.util.Handlers;
+package com.wehatemoddingmc.srppushback.handlers;
 
 //import com.wehatemoddingmc.srpPushback.Packages.*;
 
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketHandler {
 

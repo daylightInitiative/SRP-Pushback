@@ -26,7 +26,9 @@ repositories {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2860"
+	// Additional dependencies for items or modding API.
 }
+
 
 minecraft {
 	mappings channel: "stable", version: "39-1.12"

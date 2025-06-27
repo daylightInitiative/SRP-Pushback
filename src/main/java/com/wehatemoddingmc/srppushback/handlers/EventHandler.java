@@ -1,7 +1,6 @@
-package com.wehatemoddingmc.srpPushback.util.Handlers;
+package com.wehatemoddingmc.srppushback.handlers;
 
 //import com.wehatemoddingmc.srpPushback.events.*;
-import net.minecraftforge.common.MinecraftForge;
 
 public class EventHandler {
 

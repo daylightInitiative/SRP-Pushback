@@ -1,7 +1,7 @@
-package com.wehatemoddingmc.srpPushback.util.Handlers;
+package com.wehatemoddingmc.srppushback.handlers;
 
-import com.wehatemoddingmc.srpPushback.Main;
-import com.wehatemoddingmc.srpPushback.util.Reference;
+import com.wehatemoddingmc.srppushback.Main;
+import com.wehatemoddingmc.srppushback.util.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;

@@ -1,6 +1,6 @@
 [
 	{
-		"modid": "srpPushback",
+		"modid": "srppushback",
 		"name": "SRP: Pushback 1.12",
 		"description": "SRP: Pushback for 1.12.2, using ForgeGradle 5.1. Fight the parasites with custom tailored items, gamemodes",
 		"version": "${version}",

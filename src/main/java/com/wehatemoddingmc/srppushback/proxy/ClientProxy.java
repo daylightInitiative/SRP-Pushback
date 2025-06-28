@@ -2,17 +2,13 @@ package com.wehatemoddingmc.srppushback.proxy;
 
 import com.wehatemoddingmc.srppushback.util.Reference;
 
-import com.wehatemoddingmc.srppushback.init.ModKeyBindings;
+import com.wehatemoddingmc.srppushback.init.InitModKeybinds;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
@@ -51,7 +47,7 @@ public class ClientProxy extends CommonProxy {
 //        System.out.println("Key Input Event");
 
         // make local copy of key binding array
-        KeyBinding[] keyBindings = ModKeyBindings.keyBindings;
+        KeyBinding[] keyBindings = InitModKeybinds.keyBindings;
 
         // check each enumerated key binding type for pressed and take appropriate action
         if (keyBindings[0].isPressed())

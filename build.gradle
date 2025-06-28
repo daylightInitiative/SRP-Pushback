@@ -22,11 +22,16 @@ repositories {
 	maven {
 		url = "https://maven.minecraftforge.net/"
 	}
+//	maven { //for Immersive Petroleum, Posts and Technology
+//		name "CurseMaven"
+//		url "https://www.cursemaven.com"
+//	}
 }
 
 dependencies {
 	minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2860"
 	// Additional dependencies for items or modding API.
+	//deobfCompile "blusunrize:ImmersiveEngineering:0.12-92-+"
 }
 
 

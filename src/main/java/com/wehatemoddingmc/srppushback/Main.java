@@ -1,6 +1,6 @@
 package com.wehatemoddingmc.srppushback;
 
-import com.wehatemoddingmc.srppushback.handlers.RegistryHandler;
+import com.wehatemoddingmc.srppushback.util.Handlers.RegistryHandler;
 import com.wehatemoddingmc.srppushback.proxy.CommonProxy;
 import com.wehatemoddingmc.srppushback.util.Reference;
 import net.minecraftforge.fml.common.Mod;

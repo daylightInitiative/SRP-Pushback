@@ -1,4 +1,4 @@
-package com.wehatemoddingmc.srppushback.handlers;
+package com.wehatemoddingmc.srppushback.util.Handlers;
 
 import com.wehatemoddingmc.srppushback.Main;
 import com.wehatemoddingmc.srppushback.util.Reference;

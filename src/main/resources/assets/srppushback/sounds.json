@@ -1,0 +1,12 @@
+{
+  "items.wrap_gauze": {
+    "category": "ambient",
+    "subtitle": "Wrapping Gauze",
+    "sounds": [
+        {
+          "name": "srppushback:items/wrap_gauze",
+          "stream": false
+        }
+    ]
+  }
+}

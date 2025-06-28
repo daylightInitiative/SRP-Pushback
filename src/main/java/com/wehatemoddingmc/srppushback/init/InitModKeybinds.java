@@ -5,7 +5,7 @@ import org.lwjgl.input.Keyboard;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
-public class ModKeyBindings
+public class InitModKeybinds
 {
     // Store key bindings in a static final array as they are constants.
     public static final KeyBinding[] keyBindings = new KeyBinding[2];

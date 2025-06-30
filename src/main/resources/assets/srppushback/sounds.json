@@ -5,6 +5,7 @@
     "sounds": [
         {
           "name": "srppushback:items/wrap_gauze",
+          "preload": true,
           "stream": false
         }
     ]

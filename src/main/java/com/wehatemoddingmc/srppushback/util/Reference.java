@@ -1,6 +1,8 @@
 package com.wehatemoddingmc.srppushback.util;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.Random;
@@ -17,10 +19,20 @@ public class Reference {
 
     public static MinecraftServer server;
 
+    public static NBTTagCompound getNBT(ItemStack stack) {
+        NBTTagCompound nbt = stack.getTagCompound();
+        if (nbt == null) {
+            nbt = new NBTTagCompound();
+            stack.setTagCompound(nbt);
+        }
+        return nbt;
+    }
+
     public static Item setItemName(Item parItem, String parItemName)
     {
         parItem.setRegistryName(parItemName);
-        parItem.setTranslationKey(parItemName);
+        //parItem.setTranslationKey(parItemName);
+        parItem.setUnlocalizedName(parItemName);
         return parItem;
     }
 }

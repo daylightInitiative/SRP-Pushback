@@ -1,6 +1,14 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "srppushback:item/medical_gauze"
-  }
+    "layer0": "srppushback:item/undisinfected_gauze"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "CustomModelData": 1
+      },
+      "model": "srppushback:item/medical_gauze"
+    }
+  ]
 }

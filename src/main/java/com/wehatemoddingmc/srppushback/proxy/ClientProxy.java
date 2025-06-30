@@ -1,5 +1,6 @@
 package com.wehatemoddingmc.srppushback.proxy;
 
+import com.wehatemoddingmc.srppushback.sound.SoundInstance;
 import com.wehatemoddingmc.srppushback.util.Reference;
 
 import com.wehatemoddingmc.srppushback.init.InitModKeybinds;
@@ -15,13 +16,20 @@ import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 
 // TODO: Auto-generated Javadoc
 @EventBusSubscriber(value = Side.CLIENT, modid = Reference.MOD_ID)
 public class ClientProxy extends CommonProxy {
 
+    // create our sound map for our client
+    public static final Map<UUID, SoundInstance> itemSounds = new HashMap<>();
+
     /* (non-Javadoc)
-     * @see com.wehatemoddingmc.srppushback.proxy.IProxy#getPlayerEntityFromContext(net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
+     * @see com.wehatemoddingmc.srppushback.proxy.CommonProxy#getPlayerEntityFromContext(net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
      */
     @Override
     public EntityPlayer getPlayerEntityFromContext(MessageContext ctx)
@@ -32,39 +40,5 @@ public class ClientProxy extends CommonProxy {
 
         // Solution is to double-check side before returning the player:
         return (ctx.side.isClient() ? Minecraft.getMinecraft().player : ctx.getServerHandler().player);
-    }
-
-
-    /**
-     * On event.
-     *
-     * @param event the event
-     */
-    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public static void onEvent(KeyInputEvent event)
-    {
-//        // DEBUG
-//        System.out.println("Key Input Event");
-
-        // make local copy of key binding array
-        KeyBinding[] keyBindings = InitModKeybinds.keyBindings;
-
-        // check each enumerated key binding type for pressed and take appropriate action
-        if (keyBindings[0].isPressed())
-        {
-            // DEBUG
-            System.out.println("Key binding ="+keyBindings[0].getKeyDescription());
-
-            // do stuff for this key binding here
-            // remember you may need to send packet to server
-        }
-        if (keyBindings[1].isPressed())
-        {
-            // DEBUG
-            System.out.println("Key binding ="+keyBindings[1].getKeyDescription());
-
-            // do stuff for this key binding here
-            // remember you may need to send packet to server
-        }
     }
 }

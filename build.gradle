@@ -62,10 +62,10 @@ repositories {
 	maven {
 		url = "https://maven.minecraftforge.net/"
 	}
-	//maven { // JEI & Tinkers
-	//    name 'DVS1 Maven FS'
-	//    url 'https://dvs1.progwml6.com/files/maven'
-	//}
+	maven { // JEI & Tinkers
+	    name 'DVS1 Maven FS'
+	    url 'https://dvs1.progwml6.com/files/maven'
+	}
 	//
 	maven { // CraftTweaker
 	    name 'jared maven'
@@ -120,6 +120,8 @@ dependencies {
 	// Use ForgeGradle deobfuscation for IE API
 	deobfCompile "blusunrize:ImmersiveEngineering:0.12-92-+"
 	//deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.704"
+	//runtimeOnly "mezz.jei:jei_1.12.2:4.16.1.301"
+	//deobfCompile "mezz.jei:jei_1.12.2:4.16.1.301"
 }
 
 minecraft {

@@ -34,19 +34,21 @@ public class ItemMedicalGauze extends Item {
     // nbt shortcuts
     private final String ALREADY_USED = "used_gauze";
     private final String WRAP_PROGRESS = "wrapping_gauze";
-    private final String IS_DISINFECTED = "disinfected";
+//    private final String IS_DISINFECTED = "disinfected";
 
 
     public ItemMedicalGauze() {
         super();
         setMaxStackSize(16);  // Set stack size limit to 16
         setCreativeTab(CreativeTabs.COMBAT);
+        setHasSubtypes(true);
+        setMaxDamage(0);
     }
 
-    public boolean isDisinfected(ItemStack stack) {
-        NBTTagCompound nbt = getNBT(stack);
-        return nbt.getBoolean(IS_DISINFECTED);
-    }
+//    public boolean isDisinfected(ItemStack stack) {
+//        NBTTagCompound nbt = getNBT(stack);
+//        return nbt.getBoolean(IS_DISINFECTED);
+//    }
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {

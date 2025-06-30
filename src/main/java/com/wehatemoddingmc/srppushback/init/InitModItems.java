@@ -75,7 +75,17 @@ public class InitModItems
             /*
              *  Register standard model items
              */
-            registerItemModel(medical_gauze);
+            //registerItemModel(medical_gauze);
+
+            ModelLoader.setCustomModelResourceLocation(
+                    medical_gauze, 0,
+                    new ModelResourceLocation("srppushback:medical_gauze_dirty", "inventory")
+            );
+            ModelLoader.setCustomModelResourceLocation(
+                    medical_gauze, 1,
+                    new ModelResourceLocation("srppushback:medical_gauze_clean", "inventory")
+            );
+
 //            registerItemModel(sheep_skin);
 //            registerItemModel(pig_skin);
 //            registerItemModel(horse_hide);

@@ -1,3 +1,38 @@
+
+apply plugin: "net.minecraftforge.gradle.forge"
+apply plugin: "java"
+apply plugin: 'idea'
+
+sourceSets {
+	main
+	test
+}
+
+idea {
+	project {
+		jdkName = '1.8'
+		languageLevel = '1.8'
+	}
+	module {
+		name file("./").name
+		outputDir = compileJava.destinationDir
+		testOutputDir = compileTestJava.destinationDir
+	}
+}
+
+tasks.register('additionalIntellijSettings', Copy) {
+	from 'gradle/docs/idea/'
+	include "*"
+	into '.idea'
+}
+tasks.idea.dependsOn additionalIntellijSettings
+
+//--- Project Defaults
+setVersion(modVersion)
+setGroup(group)
+setArchivesBaseName(name)
+
+
 buildscript {
 	repositories {
 		mavenCentral()
@@ -18,15 +53,10 @@ buildscript {
 	}
 }
 
-apply plugin: "net.minecraftforge.gradle.forge"
-apply plugin: "java"
-apply plugin: 'idea'
-
-//java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-//compileJava {
-//    sourceCompatibility = "8"
-//    targetCompatibility = "8"
-//}
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
 
 repositories {
 	maven {
@@ -37,10 +67,10 @@ repositories {
 	//    url 'https://dvs1.progwml6.com/files/maven'
 	//}
 	//
-	//maven { // CraftTweaker
-	//    name 'jared maven'
-	//    url 'https://maven.blamejared.com/'
-	//}
+	maven { // CraftTweaker
+	    name 'jared maven'
+	    url 'https://maven.blamejared.com/'
+	}
 
 	maven { // ModMaven, there is a bunch of stuff on there
 		name 'ModMaven'
@@ -89,12 +119,14 @@ repositories {
 dependencies {
 	// Use ForgeGradle deobfuscation for IE API
 	deobfCompile "blusunrize:ImmersiveEngineering:0.12-92-+"
+	//deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.704"
 }
 
 minecraft {
 	version = "1.12.2-14.23.5.2847"
 	mappings = "snapshot_20171003"
 	runDir = "run"
+	useDepAts = true
 }
 
 //minecraft {
@@ -112,12 +144,89 @@ minecraft {
 //    }
 //}
 
-processResources {
-	inputs.property "version", project.version
-
-	filesMatching("mcmod.info") {
-		expand "version": project.version
+//--- Generating Deobfed Jar
+tasks.register('deobfJar', Jar) {
+	from sourceSets.main.output
+	classifier = 'deobf'
+	manifest {
+		attributes 'FMLAT': modATPath
+		attributes 'Maven-Artifact': group + ':' + name + ':' + modVersion
 	}
+}
+
+artifacts {
+	archives deobfJar
+}
+
+reobf {
+	coreJar { mappingType = 'SEARGE' }
+}
+
+tasks.register('coreJar', Jar) {
+	// Copy all compiled files and resources from the source set to the JAR
+	// If you have additional source sets, add the same logic here
+//	from(sourceSets.main.output) {
+//		// Don't include the coremod in the main mod
+//		// If you have more coremod-related packages that aren't nested in the main one, add exclusions for them
+//		include modASMPath
+//	}
+	manifest {
+		//attributes "FMLCorePlugin": modASMClass
+		attributes 'Maven-Artifact': group + ':' + name + '-core:' + modVersion
+	}
+	// Add a classifier to the JAR ('-core' at the end of the file name)
+	// Distinguishes the mod JAR from the shipped one
+	classifier 'core'
+	group = 'build'
+}
+
+def libPrefix = 'META-INF/libraries'
+
+jar {
+	manifest {
+		attributes 'ContainedDeps': libPrefix + '/' + coreJar.archivePath.name
+		attributes "FMLAT": modATPath
+		attributes 'Maven-Artifact': group + ':' + name + ':' + modVersion
+	}
+
+	//exclude modASMPath
+	// Add the output of the mod JAR task to the main JAR for later extraction
+	from(coreJar.archivePath.absolutePath) {
+		include '*' // Due to the way Gradle's copy tasks work, we need this line for the JAR to get added
+		into libPrefix
+	}
+}
+
+processResources {
+	//this will ensure that this task is redone when the versions change.
+	inputs.property "version", modVersion
+	inputs.property "mcversion", project.minecraft.version
+
+	//copy everything else except the mcmod.info and excluded files
+	//setDuplicatesStrategy('exclude')
+
+	//replace stuff in mcmod.info
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+		// replace properties
+		expand 'version': modVersion, 'mcversion': project.minecraft.version
+	}
+
+	//Exclude GIMP images
+	exclude '**/*.xcf'
+	//Exclude batch
+	exclude '**/*.bat'
+	exclude '**/*.sh'
+	//Exclude template textures
+	exclude '**/*Template.png'
+
+	//already excluded from gitignore, but still appear to be included in a locally built jar
+	exclude '**/desktop.ini'
+	exclude '**/Thumbs.db'
+	exclude '**/.DS_Store'
 }
 
 //When Forge 1.12 loads mods from a directory that's been put on the classpath, it expects to find resources

@@ -8,13 +8,18 @@ import com.wehatemoddingmc.srppushback.items.ItemMedicalGauze;
 import com.wehatemoddingmc.srppushback.util.Reference;
 
         import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
-        import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
         import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,12 +57,27 @@ public class InitModItems
 
             System.out.println("Registering items");
 
-            registry.register(Reference.setItemName(new ItemMedicalGauze(), "medical_gauze"));
+            registry.register(new ItemMedicalGauze("medical_gauze", CreativeTabs.COMBAT));
 //            registry.register(Reference.setItemName(new ItemSheepSkin(), "sheep_skin"));
 //            registry.register(Reference.setItemName(new ItemPigSkin(), "pig_skin"));
 //            registry.register(Reference.setItemName(new ItemHorseHide(), "horse_hide"));
 //            registry.register(Reference.setItemName(new ItemSwordExtended(ToolMaterial.IRON), "sword_extended"));
 //            registry.register(Reference.setItemName(new ItemSlimeBag(), "slime_bag"));
+        }
+
+        @SubscribeEvent
+        public static void onItemCrafted(PlayerEvent.ItemCraftedEvent event) {
+            EntityPlayer player = event.player;
+            ItemStack craftedItem = event.crafting;
+
+            // Check if the crafted item is an instance of ItemMedicalGauze
+            if (craftedItem.getItem() instanceof ItemMedicalGauze) {
+                // Determine the state of the gauze based on its metadata
+                int isDisinfected = craftedItem.getMetadata();
+                if(isDisinfected == 0) {
+                    craftedItem.setTranslatableName("Undisinfected Gauze");
+                }
+            }
         }
 
         /**

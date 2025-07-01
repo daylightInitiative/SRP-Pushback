@@ -3,6 +3,7 @@ package com.wehatemoddingmc.srppushback.items;
 import com.wehatemoddingmc.srppushback.proxy.ClientProxy;
 import com.wehatemoddingmc.srppushback.sound.SoundInstance;
 import com.wehatemoddingmc.srppushback.util.Handlers.SoundsHandler;
+import com.wehatemoddingmc.srppushback.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.creativetab.CreativeTabs;
@@ -25,10 +26,11 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import sun.util.resources.cldr.ha.CalendarData_ha_Latn_GH;
 
 import static com.wehatemoddingmc.srppushback.util.Reference.getNBT;
 
-public class ItemMedicalGauze extends Item {
+public class ItemMedicalGauze extends ItemBase {
 
     // nbt shortcuts
     private final String ALREADY_USED = "used_gauze";
@@ -36,33 +38,30 @@ public class ItemMedicalGauze extends Item {
     private final int IS_DISINFECTED = 1;
     private final int CHARGE_DELAY = 25;
 
-
-    public ItemMedicalGauze() {
-        super();
-        setMaxStackSize(16);  // Set stack size limit to 16
-        setCreativeTab(CreativeTabs.COMBAT);
+    public ItemMedicalGauze(String registryName, CreativeTabs tab) {
+        super(registryName, tab);
+        setMaxStackSize(32);  // Set stack size limit to 16
         setHasSubtypes(true);
         setMaxDamage(0);
     }
 
-//    public boolean isDisinfected(ItemStack stack) {
-//        NBTTagCompound nbt = getNBT(stack);
-//        return nbt.getBoolean(IS_DISINFECTED);
-//    }
-
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (stack.getMetadata() == IS_DISINFECTED && player.getHealth() < player.getMaxHealth()) {
-            player.setActiveHand(hand);  // begins charging
-            if (world.isRemote) {  // play charge start sound
-                SoundInstance sound = new SoundInstance(SoundsHandler.ITEM_WRAP_GAUZE);
-                Minecraft.getMinecraft().getSoundHandler().playSound(sound);
-                ClientProxy.itemSounds.put(player.getUniqueID(), sound);
+        if (stack.getMetadata() == IS_DISINFECTED) {
+
+            if(player.getHealth() < player.getMaxHealth()) {
+                player.setActiveHand(hand);  // begins charging
+                if (world.isRemote) {  // play charge start sound
+                    SoundInstance sound = new SoundInstance(SoundsHandler.ITEM_WRAP_GAUZE);
+                    Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+                    ClientProxy.itemSounds.put(player.getUniqueID(), sound);
+                }
+            } else {
+                player.sendStatusMessage(new TextComponentString("You are already healthy"), true);
             }
-            return new ActionResult<>(EnumActionResult.SUCCESS, stack);
         }
-        return super.onItemRightClick(world, player, hand);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
 
@@ -75,31 +74,42 @@ public class ItemMedicalGauze extends Item {
 
     @Override
     public int getMaxItemUseDuration(ItemStack stack) {
-        return CHARGE_DELAY; // matches your target wrap progress
+        return CHARGE_DELAY;
     }
 
     @Override
     public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.NONE; // plays bow charge animation
+        return EnumAction.NONE;
     }
 
 
 
     @Override
     public boolean onEntitySwing(EntityLivingBase entity, ItemStack stack) {
-        return true; // Prevents animation
+        return true;
     }
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World world, EntityLivingBase user) {
+
         if (!world.isRemote && user instanceof EntityPlayer && stack.getMetadata() == IS_DISINFECTED) {
             EntityPlayer player = (EntityPlayer) user;
             if (player.getHealth() < player.getMaxHealth()) {
-                player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 1));
+
+                PotionEffect MedicalRegen = new PotionEffect(
+                        MobEffects.REGENERATION, //Potion effect
+                        200, //Duration
+                        2, // Amplifier
+                        false, // isAmbient
+                        false // show particles
+                );
+
+                player.addPotionEffect(MedicalRegen);
                 stack.shrink(1);
                 SoundInstance sound = ClientProxy.itemSounds.remove(player.getUniqueID());
                 if (sound != null) sound.stopSound();
-                player.sendMessage(new TextComponentString("You applied the gauze."));
+                //player.sendMessage(new TextComponentString("You applied the gauze."));
+                player.sendStatusMessage(new TextComponentString("You applied the gauze"), true);
             }
         }
         return stack;
@@ -108,10 +118,10 @@ public class ItemMedicalGauze extends Item {
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase user, int timeLeft) {
         // User let go before fully charged — stop sound
+
         if (world.isRemote && user instanceof EntityPlayer) {
             SoundInstance sound = ClientProxy.itemSounds.remove(user.getUniqueID());
             if (sound != null) sound.stopSound();
-            ((EntityPlayer) user).sendMessage(new TextComponentString("Charging canceled"));
         }
     }
 }

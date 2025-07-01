@@ -22,6 +22,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -33,7 +34,7 @@ public class ItemMedicalGauze extends Item {
     private final String ALREADY_USED = "used_gauze";
     private final String WRAP_PROGRESS = "wrapping_gauze";
     private final int IS_DISINFECTED = 1;
-    private final int CHARGE_DELAY = 40;
+    private final int CHARGE_DELAY = 25;
 
 
     public ItemMedicalGauze() {
@@ -79,8 +80,10 @@ public class ItemMedicalGauze extends Item {
 
     @Override
     public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BOW; // plays bow charge animation
+        return EnumAction.NONE; // plays bow charge animation
     }
+
+
 
     @Override
     public boolean onEntitySwing(EntityLivingBase entity, ItemStack stack) {
@@ -111,8 +114,4 @@ public class ItemMedicalGauze extends Item {
             ((EntityPlayer) user).sendMessage(new TextComponentString("Charging canceled"));
         }
     }
-
-
-
-
 }

@@ -1,0 +1,18 @@
+{
+  "type": "forge:ore_shaped",
+  "result": {
+    "item": "srppushback:medical_gauze",
+    "data": 0
+  },
+  "pattern": [
+    "C  ",
+    "CC ",
+    "   "
+  ],
+  "key": {
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "fabricHemp"
+    }
+  }
+}

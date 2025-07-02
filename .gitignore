@@ -17,5 +17,6 @@ bin/
 *.iws
 # apple: think different:tm:
 *.DS_Store
+*.sh
 # run configurations
 run/

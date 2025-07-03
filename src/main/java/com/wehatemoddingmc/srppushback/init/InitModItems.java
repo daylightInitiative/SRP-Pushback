@@ -5,6 +5,7 @@ package com.wehatemoddingmc.srppushback.init;
 //import com.wehatemoddingmc.srppushback.items.ItemCowHide;
 //import com.wehatemoddingmc.srppushback.items.ItemHorseHide;
 import com.wehatemoddingmc.srppushback.items.ItemMedicalGauze;
+import com.wehatemoddingmc.srppushback.items.ItemMolotovThrowable;
 import com.wehatemoddingmc.srppushback.util.Reference;
 
         import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -58,6 +59,7 @@ public class InitModItems
             System.out.println("Registering items");
 
             registry.register(new ItemMedicalGauze("medical_gauze", CreativeTabs.COMBAT));
+            registry.register(new ItemMolotovThrowable("molotov_cocktail", CreativeTabs.COMBAT));
 //            registry.register(Reference.setItemName(new ItemSheepSkin(), "sheep_skin"));
 //            registry.register(Reference.setItemName(new ItemPigSkin(), "pig_skin"));
 //            registry.register(Reference.setItemName(new ItemHorseHide(), "horse_hide"));

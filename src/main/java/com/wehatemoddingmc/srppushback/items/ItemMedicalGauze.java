@@ -5,7 +5,6 @@ import com.wehatemoddingmc.srppushback.sound.SoundInstance;
 import com.wehatemoddingmc.srppushback.util.Handlers.SoundsHandler;
 import com.wehatemoddingmc.srppushback.util.Reference;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,11 +21,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import sun.util.resources.cldr.ha.CalendarData_ha_Latn_GH;
 
 import static com.wehatemoddingmc.srppushback.util.Reference.getNBT;
 
@@ -81,8 +75,6 @@ public class ItemMedicalGauze extends ItemBase {
     public EnumAction getItemUseAction(ItemStack stack) {
         return EnumAction.NONE;
     }
-
-
 
     @Override
     public boolean onEntitySwing(EntityLivingBase entity, ItemStack stack) {

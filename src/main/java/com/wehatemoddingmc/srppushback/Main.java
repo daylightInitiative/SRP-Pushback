@@ -1,6 +1,6 @@
 package com.wehatemoddingmc.srppushback;
 
-import com.wehatemoddingmc.srppushback.init.InitConfigClient;
+import com.wehatemoddingmc.srppushback.util.Handlers.PacketHandler;
 import com.wehatemoddingmc.srppushback.util.Handlers.RegistryHandler;
 import com.wehatemoddingmc.srppushback.proxy.CommonProxy;
 import com.wehatemoddingmc.srppushback.util.Reference;
@@ -31,12 +31,12 @@ public class Main {
 	public void preInit(FMLPreInitializationEvent event) {
 
 		RegistryHandler.preInitRegistries();
-		InitConfigClient.init(event);
 	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 
+		PacketHandler.init();
 		RegistryHandler.initRegistries(event);
 	}
 

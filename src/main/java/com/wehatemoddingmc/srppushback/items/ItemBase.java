@@ -9,6 +9,7 @@ public class ItemBase extends Item {
     public ItemBase(String registryName, CreativeTabs tab) {
         setRegistryName(registryName);               // internal ID (e.g., yourmod:example_item)
         setUnlocalizedName(registryName);            // translation key -> lang file
+        //setTranslationKey(registryName);
         setCreativeTab(tab != null ? tab : CreativeTabs.MISC);
     }
 }

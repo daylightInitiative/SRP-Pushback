@@ -7,6 +7,7 @@ import net.minecraft.util.SoundEvent;
 
 import javax.annotation.Nullable;
 
+// utility class for cancellable and looping sounds in 1.12.2
 public class SoundInstance extends MovingSound {
     private boolean done = false;
 

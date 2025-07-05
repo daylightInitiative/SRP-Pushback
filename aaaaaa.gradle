@@ -1,0 +1,179 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven { url = "https://maven.minecraftforge.net/" }
+        maven { url = "https://maven.covertdragon.team/repository/internal/" }
+    }
+
+    dependencies {
+        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+"
+//        classpath("com.anatawa12.forge:ForgeGradle:2.3-1.0.+") {
+//            changing = true
+//        }
+    }
+}
+
+apply plugin: "java"
+apply plugin: "net.minecraftforge.gradle"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+compileJava {
+    sourceCompatibility = "8"
+    targetCompatibility = "8"
+}
+
+repositories {
+    mavenCentral()
+    maven { url = "https://maven.minecraftforge.net/" }
+    maven { url = "https://maven.covertdragon.team/repository/internal/" }
+    maven {
+        name "CurseForge"
+        url "https://minecraft.curseforge.com/api/maven/"
+    }
+    maven { // for Immersive Engineering
+        url "https://www.cursemaven.com" // contains IE 0.12‑92
+    }
+    maven { // JEI & Tinkers
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
+    //
+    maven { // CraftTweaker
+        name 'jared maven'
+        url 'https://maven.blamejared.com/'
+    }
+
+    maven { // ModMaven, there is a bunch of stuff on there
+        name 'ModMaven'
+        url "https://modmaven.dev/"
+    }
+}
+
+
+
+dependencies {
+//    minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2860"
+    minecraft "net.minecraftforge:forge:1.12.2-14.23.5.2847"
+    //implementation "blusunrize:ImmersiveEngineering:0.12-92-+"
+    //implementation "blusunrize:ImmersiveEngineering:0.12-92-+"
+    implementation "blusunrize:ImmersiveEngineering:0.12-92-+"
+}
+
+//minecraft {
+//    version = modForge
+//    runDir = "run"
+//
+//    replace "@VERSION@":modVersion
+//    mappings = modMappings
+//    useDepAts = true
+//}
+
+minecraft {
+    mappings channel: "stable", version: "39-1.12"
+
+    accessTransformer = file("src/main/resources/META-INF/accessTransformer.cfg")
+
+    runs {
+        "client" {
+            workingDirectory file("./run")
+            mods { "${project.name}" { source sourceSets.main } }
+        }
+
+        "server" {
+            workingDirectory file("./run/server")
+            mods { "${project.name}" { source sourceSets.main } }
+        }
+    }
+}
+
+// Core-only JAR
+tasks.register('coreJar', Jar) {
+    from sourceSets.main.output // adjust includes/excludes as needed
+    archiveClassifier.set('core')
+    manifest {
+        attributes(
+                'Maven-Artifact': "${group}:${name}-core:${version}"
+        )
+    }
+    group = 'minecraft'
+}
+
+tasks.register('deobfJar', Jar) {
+    from sourceSets.main.output
+    archiveClassifier.set('dev')
+    group = 'forge'
+    manifest {
+        attributes 'Maven-Artifact': "${group}:${name}:${version}"
+    }
+}
+
+// Main mod JAR with embedded coreJar
+tasks.named('jar', Jar) {
+    manifest.attributes(
+            'ContainedDeps': "META-INF/libraries/${tasks.named('coreJar').get().archiveFileName.get()}",
+            'FMLAT': modATPath, // your AT config property
+            'Maven-Artifact': "${group}:${name}:${version}"
+    )
+    from(tasks.named('coreJar')) {
+        into 'META-INF/libraries'
+    }
+}
+
+// Reobfuscate coreJar for runtime
+//tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar) {
+//    // Only include Immersive Engineering
+//    configurations = [project.configurations.runtimeClasspath]
+//    dependencies {
+//        include(dependency("blusunrize:ImmersiveEngineering:0.12-92-+"))
+//    }
+//
+//    // Optional: relocate packages to avoid conflicts
+//    // relocate 'blusunrize.immersiveengineering', "${project.group}.shaded.ie"
+//
+//    // Exclude everything else (if necessary)
+//    exclude { details ->
+//        def path = details.path
+//        // skip your own classes
+//        path.startsWith("${project.group.replace('.', '/')}")
+//    }
+//}
+
+
+reobf {
+//    shadowJar {
+//        dependsOn shadowJar
+//    }
+}
+
+jar {
+    finalizedBy 'reobfJar'
+}
+
+// Expose deobfJar as an artefact for others to consume
+configurations {
+    deobfElements {
+        canBeResolved = false
+        canBeConsumed = true
+        attributes {
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage, "java-api"))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category, "library"))
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling, "external"))
+            attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named(LibraryElements, "jar"))
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 8)
+        }
+    }
+}
+
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("mcmod.info") {
+        expand "version": project.version
+    }
+}
+
+//When Forge 1.12 loads mods from a directory that's been put on the classpath, it expects to find resources in the same directory.
+//Default Gradle behavior puts resources in ./build/resources/main instead of ./build/classes/main/java. Let's change that.
+sourceSets.all { it.output.resourcesDir = it.output.classesDirs.getFiles().iterator().next() }

@@ -6,21 +6,17 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 public class PacketHandler {
-
     public static SimpleNetworkWrapper INSTANCE;
-
     private static int ID = 0;
+
     private static int nextID() {
         return ID++;
     }
 
-
-    public static void registerMessages() {
-
+    public static void init() {
         INSTANCE = NetworkRegistry.INSTANCE.newSimpleChannel("srpPushbackChannel");
-
-//        INSTANCE.registerMessage(ChangeSkin.Handler.class, ChangeSkin.class, nextID(), Side.SERVER);
-//        INSTANCE.registerMessage(ChangeSkin.Handler.class, ChangeSkin.class, nextID(), Side.CLIENT);
+//
+//        INSTANCE.registerMessage(MyMessage.Handler.class, MyMessage.class, nextID(), Side.SERVER);
+//        INSTANCE.registerMessage(MyMessage.Handler.class, MyMessage.class, nextID(), Side.CLIENT);
     }
-
 }

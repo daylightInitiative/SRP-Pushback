@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "srppushback:item/undisinfected_gauze"
+    "layer0": "srppushback:textures/item/undisinfected_gauze"
   }
 }

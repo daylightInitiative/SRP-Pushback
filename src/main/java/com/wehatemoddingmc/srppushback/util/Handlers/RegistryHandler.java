@@ -25,6 +25,6 @@ public class RegistryHandler {
         SoundsHandler.registerSounds();
         //NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiHandler());
         KeybindEvents.registerKeybinds(event);
-        PacketHandler.registerMessages();
+        //PacketHandler.registerMessages();
     }
 }

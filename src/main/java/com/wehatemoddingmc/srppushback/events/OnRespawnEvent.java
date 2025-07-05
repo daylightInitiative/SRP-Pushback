@@ -1,50 +1,97 @@
 package com.wehatemoddingmc.srppushback.events;
 
-import com.wehatemoddingmc.srppushback.init.InitConfigServer;
-import net.minecraft.entity.player.EntityPlayer;
+import com.wehatemoddingmc.srppushback.init.InitServerConfig;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
-
-import java.util.Random;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class OnRespawnEvent {
+    private static class TeleportInfo {
+        final EntityPlayerMP player;
+        final Vec3d pos;
+        final ChunkPos chunk;
+        TeleportInfo(EntityPlayerMP p, Vec3d v) {
+            player = p;
+            pos = v;
+            chunk = new ChunkPos((int)v.x >> 4, (int)v.z >> 4);
+        }
+    }
 
-    /* (non-Javadoc)
-     *  Return a Vector 3d pointing to the random spawn location within the radius
-     */
-    public static Vec3d getRandomSurfaceLevel(World world, int minX, int maxX, int minZ, int maxZ) {
-        // Create a random generator
-        Random rand = new Random();
+    private final List<TeleportInfo> respawnQueue = Collections.synchronizedList(new ArrayList<>());
+    private final Map<ChunkPos, List<TeleportInfo>> chunkAwaiting = new HashMap<>();
 
-        // Generate a random X and Z within the given bounds
-        int randomX = rand.nextInt(maxX - minX + 1) + minX;
-        int randomZ = rand.nextInt(maxZ - minZ + 1) + minZ;
+    @SubscribeEvent
+    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent ev) {
+        if (ev.player.world.isRemote || !InitServerConfig.enableRandomSpawns) return;
+        EntityPlayerMP p = (EntityPlayerMP) ev.player;
+        World w = p.world;
+        WorldInfo info = w.getWorldInfo();
 
-        // Get the surface level at the random X, Z position
-        int world_height = world.getHeight(randomX, randomZ);
+        int dx = ThreadLocalRandom.current().nextInt(
+                InitServerConfig.minRespawnRadiusX,
+                InitServerConfig.maxRespawnRadiusX + 1);
+        int dz = ThreadLocalRandom.current().nextInt(
+                InitServerConfig.minRespawnRadiusZ,
+                InitServerConfig.maxRespawnRadiusZ + 1);
+        int x = info.getSpawnX() + dx;
+        int z = info.getSpawnZ() + dz;
+        int surfaceY = w.getHeight(x, z);
+        Vec3d safePos = new Vec3d(x + 0.5, surfaceY + 6.0, z + 0.5);
 
-        return new Vec3d(randomX, world_height, randomZ);
+        TeleportInfo ti = new TeleportInfo(p, safePos);
+        respawnQueue.add(ti);
+
+        // Force-chunk load & mark block to ensure server/client readiness
+        w.getChunkFromChunkCoords(ti.chunk.x, ti.chunk.z);
+        w.getBlockState(new BlockPos(x, surfaceY, z));  // cache block
+        w.markBlockRangeForRenderUpdate(x, surfaceY, z, x, surfaceY, z);
     }
 
     @SubscribeEvent
-    public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        if (!event.player.world.isRemote) { // server-only
-            EntityPlayerMP player = (EntityPlayerMP) event.player;
-            boolean fromEnd = event.isEndConquered();
-            World world = player.world;
+    public void onChunkLoad(ChunkEvent.Load ev) {
+        if (ev.getChunk() == null) return;
+        ChunkPos cp = new ChunkPos(ev.getChunk().x, ev.getChunk().z);
+        respawnQueue.removeIf(ti -> {
+            if (ti.chunk.equals(cp)) {
+                chunkAwaiting.computeIfAbsent(cp, k -> new ArrayList<>()).add(ti);
+                return true;
+            }
+            return false;
+        });
+    }
 
-            Vec3d randomPosition = getRandomSurfaceLevel(world, 5, 50, 5, 50);
-            System.out.println("Random position: " + randomPosition.toString());
+    @SubscribeEvent
+    public void onWorldTick(TickEvent.WorldTickEvent ev) {
+        if (ev.world.isRemote || ev.phase != TickEvent.Phase.START) return;
 
-            player.setPosition(randomPosition.x, randomPosition.y, randomPosition.z);
-
-            //player.inventory.addItemStackToInventory(new ItemStack(Items.COOKED_BEEF, 5));
-            //player.sendMessage(new TextComponentString("Welcome back!" + (fromEnd ? " from The End!" : "")));
-
+        for (Iterator<Map.Entry<ChunkPos, List<TeleportInfo>>> it = chunkAwaiting.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<ChunkPos, List<TeleportInfo>> entry = it.next();
+            for (TeleportInfo ti : entry.getValue()) {
+                // Delay teleport to next tick for safe loading
+                ti.player.getServer().addScheduledTask(() -> {
+                    ti.player.getServer().addScheduledTask(() -> {
+                        ti.player.connection.setPlayerLocation(
+                                ti.pos.x, ti.pos.y, ti.pos.z,
+                                ti.player.rotationYaw, ti.player.rotationPitch
+                        );
+                        ti.player.motionX = 0;
+                        ti.player.motionY = 0;
+                        ti.player.motionZ = 0;
+                        ti.player.fallDistance = 0;
+                        ti.player.velocityChanged = true;
+                    });
+                });
+            }
+            it.remove();
         }
     }
 }

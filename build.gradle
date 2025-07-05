@@ -1,7 +1,29 @@
 
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url = "https://maven.minecraftforge.net/"
+        }
+        maven {
+            name = "forge"
+            url = "https://maven.minecraftforge.net/"
+        }
+    }
+
+    dependencies {
+		classpath("com.anatawa12.forge:ForgeGradle:2.3-1.0.+") {
+			changing = true
+		}
+    }
+}
+
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "java"
 apply plugin: 'idea'
+
+
 
 sourceSets {
 	main
@@ -33,25 +55,6 @@ setGroup(group)
 setArchivesBaseName(name)
 
 
-buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			url = "https://maven.minecraftforge.net/"
-		}
-		maven {
-			name = "forge"
-			url = "https://maven.minecraftforge.net/"
-		}
-	}
-
-	dependencies {
-//		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+"
-		classpath("com.anatawa12.forge:ForgeGradle:2.3-1.0.+") {
-			changing = true
-		}
-	}
-}
 
 compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile).configureEach {

@@ -9,13 +9,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 
 @Mod.EventBusSubscriber(modid = "srppushback")
-public class KeybindEvents
+public class OnKeybindEvents
 {
     // Register the key bindings during initialization.
     public static void registerKeybinds(FMLInitializationEvent event)
     {
         InitModKeybinds.registerKeyBindings(); // Register the keybindings
-        MinecraftForge.EVENT_BUS.register(KeybindEvents.class); // Register event handler for key inputs
+        MinecraftForge.EVENT_BUS.register(OnKeybindEvents.class); // Register event handler for key inputs
     }
 
     // Listen for key presses and handle them.

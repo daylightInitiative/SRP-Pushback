@@ -5,13 +5,14 @@ package com.wehatemoddingmc.srppushback.init;
 //import com.wehatemoddingmc.srppushback.items.ItemCowHide;
 //import com.wehatemoddingmc.srppushback.items.ItemHorseHide;
 import com.wehatemoddingmc.srppushback.items.ItemMedicalGauze;
-import com.wehatemoddingmc.srppushback.items.ItemMolotovThrowable;
+import com.wehatemoddingmc.srppushback.items.ItemMolotovCocktail;
+import com.wehatemoddingmc.srppushback.items.ItemRedPhosphorusPowder;
+import com.wehatemoddingmc.srppushback.items.ItemWhitePhosphorusPowder;
 import com.wehatemoddingmc.srppushback.util.Reference;
 
         import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -58,8 +59,15 @@ public class InitModItems
 
             System.out.println("Registering items");
 
+            // MATERIALS
+
+            registry.register(new ItemRedPhosphorusPowder("red_phosphorus_powder", CreativeTabs.MATERIALS));
+            registry.register(new ItemWhitePhosphorusPowder("white_phosphorus_powder", CreativeTabs.MATERIALS));
+
+
+            // MISC
             registry.register(new ItemMedicalGauze("medical_gauze", CreativeTabs.COMBAT));
-            registry.register(new ItemMolotovThrowable("molotov_cocktail", CreativeTabs.COMBAT));
+            registry.register(new ItemMolotovCocktail("molotov_cocktail", CreativeTabs.COMBAT));
 //            registry.register(Reference.setItemName(new ItemSheepSkin(), "sheep_skin"));
 //            registry.register(Reference.setItemName(new ItemPigSkin(), "pig_skin"));
 //            registry.register(Reference.setItemName(new ItemHorseHide(), "horse_hide"));

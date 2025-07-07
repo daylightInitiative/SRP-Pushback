@@ -8,12 +8,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
+@Mod.EventBusSubscriber(modid = "srppushback")
 public class OnRespawnEvent {
     private static class TeleportInfo {
         final EntityPlayerMP player;

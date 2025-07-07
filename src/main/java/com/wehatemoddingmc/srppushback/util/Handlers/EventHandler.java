@@ -11,6 +11,6 @@ public class EventHandler {
     static public void registerEvents() {
 
         // register random spawn event
-        MinecraftForge.EVENT_BUS.register(new OnRespawnEvent());
+        //MinecraftForge.EVENT_BUS.register(new OnRespawnEvent());
     }
 }

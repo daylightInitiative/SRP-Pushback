@@ -17,8 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
@@ -90,7 +88,7 @@ public class ItemMedicalGauze extends ItemBase {
 
                 PotionEffect MedicalRegen = new PotionEffect(
                         MobEffects.REGENERATION, //Potion effect
-                        200, //Duration
+                        800, //Duration (20 seconds)
                         2, // Amplifier
                         false, // isAmbient
                         false // show particles

@@ -1,9 +1,8 @@
 package com.wehatemoddingmc.srppushback.util.Handlers;
 
 //import com.wehatemoddingmc.srpPushback.world.gen.WorldGenCustomStructures;
-import com.wehatemoddingmc.srppushback.util.Handlers.SoundsHandler;
 
-import com.wehatemoddingmc.srppushback.events.KeybindEvents;
+import com.wehatemoddingmc.srppushback.events.OnKeybindEvents;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
@@ -24,7 +23,7 @@ public class RegistryHandler {
 
         SoundsHandler.registerSounds();
         //NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiHandler());
-        KeybindEvents.registerKeybinds(event);
-        //PacketHandler.registerMessages();
+        OnKeybindEvents.registerKeybinds(event);
+        PacketHandler.init();
     }
 }

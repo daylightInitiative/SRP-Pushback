@@ -28,6 +28,7 @@ public class ClientProxy extends CommonProxy {
     // create our sound map for our client
     public static final Map<UUID, SoundInstance> itemSounds = new HashMap<>();
 
+
     /* (non-Javadoc)
      * @see com.wehatemoddingmc.srppushback.proxy.CommonProxy#getPlayerEntityFromContext(net.minecraftforge.fml.common.network.simpleimpl.MessageContext)
      */

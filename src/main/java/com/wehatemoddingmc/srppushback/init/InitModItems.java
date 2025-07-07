@@ -37,6 +37,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class InitModItems
 {
     public final static ItemMedicalGauze medical_gauze = null;
+    public final static ItemRedPhosphorusPowder red_phosphorus_powder = null;
+    public final static ItemWhitePhosphorusPowder white_phosphorus_powder = null;
+
 //    public final static ItemCowHide cow_hide = null;
 //    public final static ItemSheepSkin sheep_skin = null;
 //    public final static ItemPigSkin pig_skin = null;
@@ -105,16 +108,12 @@ public class InitModItems
             /*
              *  Register standard model items
              */
-            //registerItemModel(medical_gauze);
 
-            ModelLoader.setCustomModelResourceLocation(
-                    medical_gauze, 0,
-                    new ModelResourceLocation("srppushback:medical_gauze_dirty", "inventory")
-            );
-            ModelLoader.setCustomModelResourceLocation(
-                    medical_gauze, 1,
-                    new ModelResourceLocation("srppushback:medical_gauze_clean", "inventory")
-            );
+            registerItemModel(medical_gauze, 0, "srppushback:medical_gauze_dirty");
+            registerItemModel(medical_gauze, 1, "srppushback:medical_gauze_clean");
+
+            registerItemModel(red_phosphorus_powder, 0, "srppushback:red_phosphorus_powder");
+            registerItemModel(white_phosphorus_powder, 0, "srppushback:white_phosphorus_powder");
 
 //            registerItemModel(sheep_skin);
 //            registerItemModel(pig_skin);
@@ -145,32 +144,32 @@ public class InitModItems
         }
     }
 
-    /**
-     * Register item model.
-     *
-     * @param parItem
-     *            the par item
-     */
-    @SideOnly(Side.CLIENT)
-    public static void registerItemModel(Item parItem)
-    {
-        registerItemModel(parItem, 0);
-    }
+//    /**
+//     * Register item model.
+//     *
+//     * @param parItem
+//     *            the par item
+//     */
+//    @SideOnly(Side.CLIENT)
+//    public static void registerItemModel(Item parItem)
+//    {
+//        registerItemModel(parItem, 0);
+//    }
 
     /**
      * Register item model.
      *
-     * @param parItem the par item
-     * @param parMetaData the par meta data
+     * @param item the par item
+     * @param metadataValue the par meta data
      */
     @SideOnly(Side.CLIENT)
-    public static void registerItemModel(Item parItem, int parMetaData)
+    public static void registerItemModel(Item item, int metadataValue, String itemID)
     {
 //        // DEBUG
-//        System.out.println("Registering item model for: " + parItem.getRegistryName());
+        System.out.println("Registering item model for: " + itemID);
 
-        ModelLoader.setCustomModelResourceLocation(parItem, parMetaData,
-                new ModelResourceLocation(parItem.getRegistryName(), "inventory"));
+        ModelLoader.setCustomModelResourceLocation(item, metadataValue,
+                new ModelResourceLocation(itemID, "inventory"));
     }
 
     /**

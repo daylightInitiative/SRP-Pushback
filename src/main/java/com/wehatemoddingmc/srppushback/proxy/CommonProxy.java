@@ -16,6 +16,7 @@ public class CommonProxy {
      * @param parContext the context
      * @return the player entity from context
      */
+
     public EntityPlayer getPlayerEntityFromContext(MessageContext parContext) {
         return null;
     }

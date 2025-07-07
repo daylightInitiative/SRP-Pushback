@@ -26,4 +26,5 @@ public class RegistryHandler {
         OnKeybindEvents.registerKeybinds(event);
         PacketHandler.init();
     }
+
 }

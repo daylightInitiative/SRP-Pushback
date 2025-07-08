@@ -24,6 +24,7 @@ public class RegistryHandler {
 
         Main.logger.info("Initializing registries...");
 
+        LootTableHandler.init();
         SoundsHandler.registerSounds();
         //NetworkRegistry.INSTANCE.registerGuiHandler(Main.instance, new GuiHandler());
         OnKeybindEvents.registerKeybinds(event);

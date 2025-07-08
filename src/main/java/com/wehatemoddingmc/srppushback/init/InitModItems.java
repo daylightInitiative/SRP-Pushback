@@ -4,10 +4,7 @@ package com.wehatemoddingmc.srppushback.init;
 //import com.wehatemoddingmc.srppushback.client.models.ModelSlimeBag;
 //import com.wehatemoddingmc.srppushback.items.ItemCowHide;
 //import com.wehatemoddingmc.srppushback.items.ItemHorseHide;
-import com.wehatemoddingmc.srppushback.items.ItemMedicalGauze;
-import com.wehatemoddingmc.srppushback.items.ItemMolotovCocktail;
-import com.wehatemoddingmc.srppushback.items.ItemRedPhosphorusPowder;
-import com.wehatemoddingmc.srppushback.items.ItemWhitePhosphorusPowder;
+import com.wehatemoddingmc.srppushback.items.*;
 import com.wehatemoddingmc.srppushback.util.Reference;
 
 import net.minecraft.block.Block;
@@ -42,6 +39,7 @@ public class InitModItems
     public final static ItemMedicalGauze medical_gauze = null;
     public final static ItemRedPhosphorusPowder red_phosphorus_powder = null;
     public final static ItemWhitePhosphorusPowder white_phosphorus_powder = null;
+    public final static ItemRedPhosphorusShard red_phosphorus_shard = null;
 
 //    public final static ItemCowHide cow_hide = null;
 //    public final static ItemSheepSkin sheep_skin = null;
@@ -87,7 +85,7 @@ public class InitModItems
 
             registry.register(new ItemRedPhosphorusPowder("red_phosphorus_powder", CreativeTabs.MATERIALS));
             registry.register(new ItemWhitePhosphorusPowder("white_phosphorus_powder", CreativeTabs.MATERIALS));
-
+            registry.register(new ItemRedPhosphorusShard("red_phosphorus_shard", CreativeTabs.MATERIALS));
 
             // MISC
             registry.register(new ItemMedicalGauze("medical_gauze", CreativeTabs.COMBAT));
@@ -136,6 +134,8 @@ public class InitModItems
             registerItemModel(medical_gauze, 1, "medical_gauze_clean");
             registerItemModel(red_phosphorus_powder, 0, "red_phosphorus_powder");
             registerItemModel(white_phosphorus_powder, 0, "white_phosphorus_powder");
+
+            registerItemModel(red_phosphorus_shard, 0, "red_phosphorus_shard");
 
 //            registerItemModel(sheep_skin);
 //            registerItemModel(pig_skin);

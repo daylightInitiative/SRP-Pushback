@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "srppushback:block/phosphorus_ore"
+  }
+}

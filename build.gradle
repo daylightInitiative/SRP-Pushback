@@ -125,6 +125,8 @@ dependencies {
 	//deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.704"
 	//runtimeOnly "mezz.jei:jei_1.12.2:4.16.1.301"
 	//deobfCompile "mezz.jei:jei_1.12.2:4.16.1.301"
+	implementation 'org.apache.logging.log4j:log4j-api:2.14.1'
+	implementation 'org.apache.logging.log4j:log4j-core:2.14.1'
 }
 
 minecraft {

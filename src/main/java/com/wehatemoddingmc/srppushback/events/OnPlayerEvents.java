@@ -27,18 +27,15 @@ public class OnPlayerEvents {
 //        }
 
         // when player is damaged we remove the regeneration effect
-        if(entity instanceof EntityPlayer) {
+        if(entity instanceof EntityPlayer && !entity.world.isRemote) {
 
             EntityPlayerMP player = (EntityPlayerMP)entity;
-            World world = player.world;
 
-            if(!world.isRemote) {
-                for (PotionEffect effect : player.getActivePotionEffects()) {
-                    if(effect.getEffectName().equals("regeneration")) {
-                        player.removeActivePotionEffect(effect.getPotion());
-                    }
-                    //player.removePotionEffect(effect.getType());
+            for (PotionEffect effect : player.getActivePotionEffects()) {
+                if(effect.getEffectName().equals("regeneration")) {
+                    player.removeActivePotionEffect(effect.getPotion());
                 }
+                //player.removePotionEffect(effect.getType());
             }
         }
 

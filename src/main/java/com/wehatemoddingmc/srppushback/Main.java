@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid= Reference.MOD_ID, name = Reference.NAME, version = Reference.VERSION)
 public class Main {
 
-	public static final Logger LOGGER = LogManager.getLogger(Reference.MOD_ID);
+	public static final Logger logger = LogManager.getLogger(Reference.MOD_ID);
 
 	@Mod.Instance
 	public static Main instance;
@@ -36,7 +36,6 @@ public class Main {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 
-		PacketHandler.init();
 		RegistryHandler.initRegistries(event);
 	}
 

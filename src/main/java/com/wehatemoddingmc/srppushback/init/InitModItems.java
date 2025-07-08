@@ -10,7 +10,8 @@ import com.wehatemoddingmc.srppushback.items.ItemRedPhosphorusPowder;
 import com.wehatemoddingmc.srppushback.items.ItemWhitePhosphorusPowder;
 import com.wehatemoddingmc.srppushback.util.Reference;
 
-        import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -27,13 +28,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
         import net.minecraftforge.registries.IForgeRegistry;
 
+import static com.wehatemoddingmc.srppushback.util.Reference.MOD_ID;
+
 // TODO: Auto-generated Javadoc
 /**
  * Instances and registration class
  *
  * @author jabelar
  */
-@ObjectHolder(Reference.MOD_ID)
+@ObjectHolder(MOD_ID)
 public class InitModItems
 {
     public final static ItemMedicalGauze medical_gauze = null;
@@ -47,7 +50,22 @@ public class InitModItems
 //    public final static ItemSwordExtended sword_extended = null;
 //    public final static ItemSlimeBag slime_bag = null;
 
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
+    public static void registerItemModel(Item item, int metadata, String modelName) {
+        ModelLoader.setCustomModelResourceLocation(
+                item, metadata,
+                new ModelResourceLocation(MOD_ID + ":" + modelName, "inventory")
+        );
+    }
+
+    public static void registerBlockItemModel(Block block, int metadata, String modelName) {
+        ModelLoader.setCustomModelResourceLocation(
+                Item.getItemFromBlock(block), metadata,
+                new ModelResourceLocation(MOD_ID + ":" + modelName, "inventory")
+        );
+    }
+
+
+    @Mod.EventBusSubscriber(modid = MOD_ID)
     public static class RegistrationHandler
     {
         /**
@@ -61,6 +79,9 @@ public class InitModItems
             final IForgeRegistry<Item> registry = event.getRegistry();
 
             System.out.println("Registering items");
+
+            // BLOCKS
+            registry.register(InitModBlocks.PHOSPHORUS_ORE.createItemBlock());
 
             // MATERIALS
 
@@ -109,11 +130,12 @@ public class InitModItems
              *  Register standard model items
              */
 
-            registerItemModel(medical_gauze, 0, "srppushback:medical_gauze_dirty");
-            registerItemModel(medical_gauze, 1, "srppushback:medical_gauze_clean");
+            registerBlockItemModel(InitModBlocks.PHOSPHORUS_ORE, 0, "phosphorus_ore");
 
-            registerItemModel(red_phosphorus_powder, 0, "srppushback:red_phosphorus_powder");
-            registerItemModel(white_phosphorus_powder, 0, "srppushback:white_phosphorus_powder");
+            registerItemModel(medical_gauze, 0, "medical_gauze_dirty");
+            registerItemModel(medical_gauze, 1, "medical_gauze_clean");
+            registerItemModel(red_phosphorus_powder, 0, "red_phosphorus_powder");
+            registerItemModel(white_phosphorus_powder, 0, "white_phosphorus_powder");
 
 //            registerItemModel(sheep_skin);
 //            registerItemModel(pig_skin);
@@ -156,21 +178,15 @@ public class InitModItems
 //        registerItemModel(parItem, 0);
 //    }
 
-    /**
-     * Register item model.
-     *
-     * @param item the par item
-     * @param metadataValue the par meta data
-     */
-    @SideOnly(Side.CLIENT)
-    public static void registerItemModel(Item item, int metadataValue, String itemID)
-    {
-//        // DEBUG
-        System.out.println("Registering item model for: " + itemID);
 
-        ModelLoader.setCustomModelResourceLocation(item, metadataValue,
-                new ModelResourceLocation(itemID, "inventory"));
-    }
+//    public static void registerItemModel(Item item, int metadataValue, String itemID)
+//    {
+////        // DEBUG
+//        System.out.println("Registering item model for: " + itemID);
+//
+//        ModelLoader.setCustomModelResourceLocation(item, metadataValue,
+//                new ModelResourceLocation(itemID, "inventory"));
+//    }
 
     /**
      * Register ore dictionary entries.

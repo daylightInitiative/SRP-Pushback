@@ -1,4 +1,7 @@
+tile.phosphorus_ore.name=Phosphor Ore
 item.medical_gauze.name=Medical Gauze
+item.red_phosphorus_powder.name=Red phosphorus
+item.white_phosphorus_powder.name=White phosphorus
 key.structure.desc=Structure Key
 key.hud.desc=HUD Key
 key.srppushback.category=SRP Pushback
